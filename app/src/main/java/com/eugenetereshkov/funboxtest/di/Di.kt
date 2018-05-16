@@ -1,15 +1,22 @@
 package com.eugenetereshkov.funboxtest.di
 
-import com.eugenetereshkov.funboxtest.presenter.MainViewModel
+import com.eugenetereshkov.funboxtest.presenter.backend.BackEndViewModel
+import com.eugenetereshkov.funboxtest.presenter.main.MainViewModel
 import org.koin.android.architecture.ext.viewModel
 import org.koin.dsl.module.applicationContext
 import ru.terrakok.cicerone.Cicerone
+import ru.terrakok.cicerone.Router
 
 
 val appModule = applicationContext {
-    val cicerone = Cicerone.create()
+    val mainCicerone = Cicerone.create()
+    bean("main") { mainCicerone.router }
+    bean("main") { mainCicerone.navigatorHolder }
 
-    bean { cicerone.router }
-    bean { cicerone.navigatorHolder }
-    viewModel { MainViewModel(get()) }
+    val backEndCicerone = Cicerone.create()
+    bean("backEnd") { backEndCicerone.router }
+    bean("backEnd") { backEndCicerone.navigatorHolder }
+
+    viewModel { MainViewModel(get<Router>(name = "main")) }
+    viewModel { BackEndViewModel(get<Router>(name = "backEnd")) }
 }
