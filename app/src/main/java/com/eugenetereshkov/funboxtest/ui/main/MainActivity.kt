@@ -5,7 +5,7 @@ import android.support.design.widget.BottomNavigationView
 import android.support.v7.app.AppCompatActivity
 import com.eugenetereshkov.funboxtest.R
 import com.eugenetereshkov.funboxtest.presenter.main.MainViewModel
-import com.eugenetereshkov.funboxtest.ui.backend.BackEndContainerFramgent
+import com.eugenetereshkov.funboxtest.ui.backend.BackEndContainerFragment
 import com.eugenetereshkov.funboxtest.ui.common.BaseFragment
 import com.eugenetereshkov.funboxtest.ui.storefront.StoreFrontFragment
 import kotlinx.android.synthetic.main.activity_main.*
@@ -63,7 +63,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun createNewFragments(): HashMap<String, BaseFragment> = hashMapOf(
             tabKeys[0] to StoreFrontFragment.newInstance(),
-            tabKeys[1] to BackEndContainerFramgent.newInstance()
+            tabKeys[1] to BackEndContainerFragment.newInstance()
     )
 
     private fun findFragments(): HashMap<String, BaseFragment> = hashMapOf(

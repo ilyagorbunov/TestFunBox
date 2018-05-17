@@ -6,16 +6,18 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.eugenetereshkov.funboxtest.R
 import com.eugenetereshkov.funboxtest.Screen
+import com.eugenetereshkov.funboxtest.data.entity.Product
 import com.eugenetereshkov.funboxtest.ui.common.BaseFragment
+import com.eugenetereshkov.funboxtest.ui.editproduct.EditProductFragment
 import org.koin.android.ext.android.inject
 import ru.terrakok.cicerone.NavigatorHolder
 import ru.terrakok.cicerone.Router
 import ru.terrakok.cicerone.android.SupportAppNavigator
 
-class BackEndContainerFramgent : BaseFragment() {
+class BackEndContainerFragment : BaseFragment() {
 
     companion object {
-        fun newInstance() = BackEndContainerFramgent()
+        fun newInstance() = BackEndContainerFragment()
     }
 
     override val layoutResId: Int = R.layout.fragment_back_end_container
@@ -26,6 +28,7 @@ class BackEndContainerFramgent : BaseFragment() {
 
             override fun createFragment(screenKey: String?, data: Any?): Fragment? = when (screenKey) {
                 Screen.BACK_END_SCREEN -> BackEndFragment.newInstance()
+                Screen.EDIT_PRODUCT_SCREEN -> EditProductFragment.newInstance(data as? Product)
                 else -> null
             }
 
@@ -49,5 +52,10 @@ class BackEndContainerFramgent : BaseFragment() {
     override fun onPause() {
         navigatorHolder.removeNavigator()
         super.onPause()
+    }
+
+    override fun onBackPressed(): Boolean {
+        router.exit()
+        return true
     }
 }

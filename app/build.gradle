@@ -42,14 +42,16 @@ dependencies {
 
     // Arch
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
+    implementation 'com.android.support:support-v4:27.1.1'
     kapt "android.arch.lifecycle:compiler:$lifecycle_version"
     implementation 'ru.terrakok.cicerone:cicerone:3.0.0'
     implementation "org.koin:koin-android:$koin_version"
     implementation "org.koin:koin-android-architecture:$koin_version"
 
-    // RxJava2
+    // Async
     implementation "io.reactivex.rxjava2:rxjava:2.1.14-RC1"
     implementation 'io.reactivex.rxjava2:rxandroid:2.0.2'
+    implementation 'com.jakewharton.rxbinding2:rxbinding-kotlin:2.1.1'
 
     implementation 'androidx.core:core-ktx:0.3'
 

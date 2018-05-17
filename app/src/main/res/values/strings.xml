@@ -11,4 +11,9 @@
     <string name="price">Цена</string>
     <string name="count">Количество</string>
     <string name="bye">Купить</string>
+    <string name="add_product">Добавить товар</string>
+    <string name="adding_product">Добавление продукта</string>
+    <string name="editing_product">Редактирование продукта</string>
+    <string name="save">Сохранить</string>
+    <string name="product_name">Нзвание товара</string>
 </resources>

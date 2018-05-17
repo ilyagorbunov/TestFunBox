@@ -1,6 +1,7 @@
 package com.eugenetereshkov.funboxtest.di
 
 import com.eugenetereshkov.funboxtest.presenter.backend.BackEndViewModel
+import com.eugenetereshkov.funboxtest.presenter.editproduct.EditProductViewModel
 import com.eugenetereshkov.funboxtest.presenter.main.MainViewModel
 import org.koin.android.architecture.ext.viewModel
 import org.koin.dsl.module.applicationContext
@@ -19,4 +20,5 @@ val appModule = applicationContext {
 
     viewModel { MainViewModel(get<Router>(name = "main")) }
     viewModel { BackEndViewModel(get<Router>(name = "backEnd")) }
+    viewModel { EditProductViewModel(get<Router>(name = "backEnd")) }
 }
