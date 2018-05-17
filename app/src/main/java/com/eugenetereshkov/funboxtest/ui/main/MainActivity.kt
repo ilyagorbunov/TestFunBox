@@ -10,7 +10,6 @@ import com.eugenetereshkov.funboxtest.ui.common.BaseFragment
 import com.eugenetereshkov.funboxtest.ui.storefront.StoreFrontFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
-import timber.log.Timber
 
 class MainActivity : AppCompatActivity() {
 
@@ -51,9 +50,6 @@ class MainActivity : AppCompatActivity() {
     private fun tabIdToFragmentTag(id: Int) = "tab_$id"
 
     private fun showTab(item: Int) {
-        Timber.d("item $item")
-        Timber.d("old $currentTab")
-
         supportFragmentManager.beginTransaction()
                 .hide(tabs[tabIdToFragmentTag(currentTab)])
                 .show(tabs[tabIdToFragmentTag(item)])

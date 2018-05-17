@@ -54,8 +54,5 @@ class BackEndContainerFragment : BaseFragment() {
         super.onPause()
     }
 
-    override fun onBackPressed(): Boolean {
-        router.exit()
-        return true
-    }
+    override fun onBackPressed() = router.exit()
 }
