@@ -84,7 +84,7 @@ class EditProductFragment : BaseFragment() {
 
         data?.run {
             textViewName.setText(name)
-            editTextPrice.setText(price.toString())
+            editTextPrice.setText(price)
         }
     }
 

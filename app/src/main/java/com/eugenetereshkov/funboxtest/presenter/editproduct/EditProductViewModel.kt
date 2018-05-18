@@ -23,8 +23,12 @@ class EditProductViewModel(
             data.second.not() -> productChangesLiveData.value = false
             this.product != null -> productChangesLiveData.value = this.product.toString() != product.toString()
             else -> {
-                this.product = product
-                if (isEditMode.not()) productChangesLiveData.value = true
+                if (isEditMode.not()) {
+                    productChangesLiveData.value = true
+                    this.product = Product("", "", "")
+                } else {
+                    this.product = product
+                }
             }
         }
     }
