@@ -5,9 +5,7 @@ import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
-import androidx.core.widget.toast
 import com.eugenetereshkov.funboxtest.R
-import com.eugenetereshkov.funboxtest.data.entity.Product
 import com.eugenetereshkov.funboxtest.presenter.main.MainViewModel
 import com.eugenetereshkov.funboxtest.ui.common.BaseFragment
 import com.eugenetereshkov.funboxtest.ui.common.list.StoreFrontAdapter
@@ -38,10 +36,9 @@ class StoreFrontFragment : BaseFragment() {
         }.also {
             LinearSnapHelper().attachToRecyclerView(it)
         }
-        adapter.submitList((0..10).map { Product("Samsung", 23, 1) }.toMutableList())
 
-        viewModel.intervalLiveData.observe(this, Observer { interval ->
-            interval?.let { context?.toast(it.toString()) }
+        viewModel.dataLiveData.observe(this, Observer { data ->
+            data?.let { adapter.submitList(it) }
         })
     }
 }

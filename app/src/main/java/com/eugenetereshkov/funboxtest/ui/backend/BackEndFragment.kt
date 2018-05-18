@@ -1,11 +1,11 @@
 package com.eugenetereshkov.funboxtest.ui.backend
 
 
+import android.arch.lifecycle.Observer
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.MenuItem
 import com.eugenetereshkov.funboxtest.R
-import com.eugenetereshkov.funboxtest.data.entity.Product
 import com.eugenetereshkov.funboxtest.presenter.backend.BackEndViewModel
 import com.eugenetereshkov.funboxtest.presenter.main.MainViewModel
 import com.eugenetereshkov.funboxtest.ui.common.BaseFragment
@@ -46,13 +46,14 @@ class BackEndFragment : BaseFragment() {
             }
         }
 
-
         recyclerView.apply {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
             adapter = this@BackEndFragment.adapter
         }
 
-        adapter.submitList((0..10).map { Product("Samsung", 23, 1) }.toMutableList())
+        mainViewModel.dataLiveData.observe(this, Observer { data ->
+            data?.let { adapter.submitList(it) }
+        })
     }
 }

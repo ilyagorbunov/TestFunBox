@@ -76,7 +76,7 @@ class EditProductFragment : BaseFragment() {
                 nameObservable,
                 priceObservable,
                 EditProduct { namePair, pricePair ->
-                    Pair(Product(namePair.first, pricePair.first, 2), namePair.second && pricePair.second)
+                    Pair(Product(namePair.first, pricePair.first.toString(), 2.toString()), namePair.second && pricePair.second)
                 })
                 .subscribe { viewModel.onProductChanged(it, isEditMode) }
                 .bindTo(disposable)
