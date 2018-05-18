@@ -24,7 +24,7 @@ class BackEndFragment : BaseFragment() {
     override val layoutResId: Int = R.layout.fragment_back_end
 
     private val adapter by lazy {
-        BackEndProductAdapter({ backEndViewModel.onEditProductPressed(it) })
+        BackEndProductAdapter { backEndViewModel.onEditProductPressed(it) }
     }
     private val mainViewModel: MainViewModel by sharedViewModel()
     private val backEndViewModel: BackEndViewModel by viewModel()
