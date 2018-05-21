@@ -118,13 +118,13 @@ class EditProductFragment : BaseFragment() {
                 .subscribe { viewModel.onProductChanged(it, isEditMode) }
                 .bindTo(disposable)
 
-        index?.let {
-            mainViewModel.data[it].run {
-                textViewName.setText(name)
-                editTextPrice.setText(price.toString())
-                editTextCount.setText(count.toString())
-            }
-        }
+        val (name, price, count) = index?.let {
+            mainViewModel.data[it].run { Triple(name, price, count) }
+        } ?: Triple("", 0f, 0)
+
+        textViewName.setText(name)
+        editTextPrice.setText(price.toString())
+        editTextCount.setText(count.toString())
     }
 
     override fun onStop() {

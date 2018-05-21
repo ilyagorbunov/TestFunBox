@@ -15,4 +15,3 @@ data class Product(
         return "$name#$price#$count"
     }
 }
-
