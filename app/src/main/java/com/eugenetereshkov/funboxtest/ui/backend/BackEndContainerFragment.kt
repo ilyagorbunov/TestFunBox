@@ -6,7 +6,6 @@ import android.os.Bundle
 import android.support.v4.app.Fragment
 import com.eugenetereshkov.funboxtest.R
 import com.eugenetereshkov.funboxtest.Screen
-import com.eugenetereshkov.funboxtest.data.entity.Product
 import com.eugenetereshkov.funboxtest.ui.common.BaseFragment
 import com.eugenetereshkov.funboxtest.ui.editproduct.EditProductFragment
 import org.koin.android.ext.android.inject
@@ -28,7 +27,7 @@ class BackEndContainerFragment : BaseFragment() {
 
             override fun createFragment(screenKey: String?, data: Any?): Fragment? = when (screenKey) {
                 Screen.BACK_END_SCREEN -> BackEndFragment.newInstance()
-                Screen.EDIT_PRODUCT_SCREEN -> EditProductFragment.newInstance(data as? Product)
+                Screen.EDIT_PRODUCT_SCREEN -> EditProductFragment.newInstance(data as? Int)
                 else -> null
             }
 

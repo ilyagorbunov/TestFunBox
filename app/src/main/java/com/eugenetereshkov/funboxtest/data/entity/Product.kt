@@ -7,6 +7,12 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Product(
         var name: String,
-        var price: String,
-        var count: String
-) : Parcelable
+        var price: Float,
+        var count: Int
+) : Parcelable {
+
+    fun toStringForConverts(): String {
+        return "$name#$price#$count"
+    }
+}
+

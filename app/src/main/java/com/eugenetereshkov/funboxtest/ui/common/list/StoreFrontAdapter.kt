@@ -34,8 +34,11 @@ class StoreFrontAdapter : ListAdapter<Product, StoreFrontAdapter.ViewHolder>(Pro
 
         fun bind(item: Product) {
             textViewName.text = item.name
-            textViewPrice.text = item.price.toString()
-            textViewCount.text = item.count.toString()
+
+            itemView.context.run {
+                textViewPrice.text = getString(R.string.price_format, item.price)
+                textViewCount.text = getString(R.string.count_format, item.count)
+            }
         }
     }
 }

@@ -1,13 +1,7 @@
 <resources>
     <string name="app_name">FunBoxTest</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
-    <string name="title_notifications">Notifications</string>
     <string name="store_front">Store-Front</string>
     <string name="back_end">Back-End</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="price">Цена</string>
     <string name="count">Количество</string>
     <string name="bye">Купить</string>
@@ -16,4 +10,6 @@
     <string name="editing_product">Редактирование продукта</string>
     <string name="save">Сохранить</string>
     <string name="product_name">Нзвание товара</string>
+    <string name="count_format">%d шт.</string>
+    <string name="price_format">%1$.2f руб.</string>
 </resources>

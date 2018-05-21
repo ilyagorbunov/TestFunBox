@@ -11,7 +11,8 @@ class EditProductViewModel(
 
     val productChangesLiveData = MutableLiveData<Boolean>()
 
-    private var product: Product? = null
+    private var oldProduct: Product? = null
+    lateinit var newProduct: Product
 
     fun onBackPressed() {
         router.exit()
@@ -19,15 +20,17 @@ class EditProductViewModel(
 
     fun onProductChanged(data: Pair<Product, Boolean>, isEditMode: Boolean) {
         val product = data.first
+        newProduct = product
+
         when {
             data.second.not() -> productChangesLiveData.value = false
-            this.product != null -> productChangesLiveData.value = this.product.toString() != product.toString()
+            this.oldProduct != null -> productChangesLiveData.value = this.oldProduct.toString() != product.toString()
             else -> {
                 if (isEditMode.not()) {
                     productChangesLiveData.value = true
-                    this.product = Product("", "", "")
+                    this.oldProduct = Product("", 0f, 0)
                 } else {
-                    this.product = product
+                    this.oldProduct = product
                 }
             }
         }

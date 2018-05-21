@@ -3,32 +3,32 @@ package com.eugenetereshkov.funboxtest.presenter.main
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import com.eugenetereshkov.funboxtest.data.entity.Product
-import com.eugenetereshkov.funboxtest.data.storage.RawAppData
+import com.eugenetereshkov.funboxtest.data.repository.IProductRepository
 import com.eugenetereshkov.funboxtest.extension.bindTo
-import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
-import io.reactivex.schedulers.Schedulers
 import ru.terrakok.cicerone.Router
 
 class MainViewModel(
         private val router: Router,
-        private val rawAppData: RawAppData
+        private val productRepository: IProductRepository
 ) : ViewModel() {
 
     val dataLiveData = MutableLiveData<List<Product>>()
     val loadingLiveData = MutableLiveData<Boolean>()
 
+    lateinit var data: MutableList<Product>
     private val disposable = CompositeDisposable()
 
     init {
-        rawAppData.getProducts()
+        productRepository.getProducts()
                 .doOnSubscribe { loadingLiveData.postValue(true) }
                 .doAfterTerminate { loadingLiveData.postValue(false) }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(
-                        { dataLiveData.value = it },
-                        { router.showSystemMessage(it.message) }
+                        { products: List<Product> ->
+                            data = products as MutableList<Product>
+                            dataLiveData.value = data
+                        },
+                        { router.showSystemMessage(it.toString()) }
                 )
                 .bindTo(disposable)
 
@@ -39,7 +39,28 @@ class MainViewModel(
         super.onCleared()
     }
 
+    fun onDataChanged(index: Int, product: Product) {
+        data[index] = product
+        saveData()
+    }
+
+    fun onDataAdded(newProduct: Product) {
+        data.add(newProduct)
+        saveData()
+    }
+
     fun onBackPressed() {
         router.exit()
+    }
+
+    private fun saveData() {
+        productRepository.saveProducts(data)
+                .doOnSubscribe { loadingLiveData.postValue(true) }
+                .doAfterTerminate { loadingLiveData.postValue(false) }
+                .subscribe {
+                    dataLiveData.value = data
+                    router.showSystemMessage("Saved")
+                }
+                .bindTo(disposable)
     }
 }

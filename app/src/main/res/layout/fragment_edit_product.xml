@@ -1,22 +1,32 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.editproduct.EditProductFragment">
+
+    <ImageButton
+        android:id="@+id/imageButtonRemove"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_remove_black_24dp"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonAdd"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/editTextCount"
+        app:layout_constraintTop_toTopOf="@+id/editTextCount" />
 
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:background="@color/colorPrimary"
-        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
-        app:theme="@style/ToolbarTheme"
-        app:popupTheme="@style/PopupToolbarTheme"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:navigationIcon="@drawable/ic_arrow_back_white_24dp"
+        app:popupTheme="@style/PopupToolbarTheme"
+        app:theme="@style/ToolbarTheme" />
 
     <EditText
         android:id="@+id/textViewName"
@@ -36,10 +46,34 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:ems="10"
-        android:inputType="number"
         android:hint="@string/price"
-        tools:text="34"
+        android:inputType="number"
         app:layout_constraintEnd_toEndOf="@+id/textViewName"
         app:layout_constraintStart_toStartOf="@+id/textViewName"
-        app:layout_constraintTop_toBottomOf="@+id/textViewName" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewName"
+        tools:text="34" />
+
+    <EditText
+        android:id="@+id/editTextCount"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:ems="10"
+        android:hint="@string/count"
+        android:inputType="none"
+        app:layout_constraintEnd_toStartOf="@+id/imageButtonRemove"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="@+id/editTextPrice"
+        app:layout_constraintTop_toBottomOf="@+id/editTextPrice"
+        tools:text="11" />
+
+    <ImageButton
+        android:id="@+id/imageButtonAdd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_add_black_24dp"
+        app:layout_constraintEnd_toEndOf="@+id/editTextPrice"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/imageButtonRemove"
+        app:layout_constraintTop_toTopOf="@+id/imageButtonRemove" />
 </android.support.constraint.ConstraintLayout>

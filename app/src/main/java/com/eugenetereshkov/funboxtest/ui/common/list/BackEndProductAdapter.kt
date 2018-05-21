@@ -12,7 +12,7 @@ import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_back_end_product.*
 
 class BackEndProductAdapter(
-        private val listener: (Product) -> Unit
+        private val listener: (index: Int) -> Unit
 ) : ListAdapter<Product, BackEndProductAdapter.ViewHolder>(ProductDiffUtilsCallBack) {
 
     private object ProductDiffUtilsCallBack : DiffUtil.ItemCallback<Product>() {
@@ -28,25 +28,24 @@ class BackEndProductAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        holder.bind(position, getItem(position))
     }
 
     class ViewHolder(
             override val containerView: View,
-            listener: (Product) -> Unit
+            listener: (index: Int) -> Unit
     ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        private lateinit var item: Product
+        private var index: Int = RecyclerView.NO_POSITION
 
         init {
-            itemView.setOnClickListener { listener(item) }
+            itemView.setOnClickListener { listener(index) }
         }
 
-        fun bind(item: Product) {
-            this.item = item
-
+        fun bind(position: Int, item: Product) {
+            this.index = position
             textViewName.text = item.name
-            textViewCount.text = item.count.toString()
+            textViewCount.text = itemView.context.getString(R.string.count_format, item.count)
         }
     }
 }

@@ -18,6 +18,6 @@ class CSVFile(private var inputStream: InputStream) {
 
     companion object {
         fun convertToProduct(data: List<Array<String>>): List<Product> =
-                data.map { Product(it[0], it[1], it[1]) }.toList()
+                data.map { Product(it[0], it[1].toFloat(), it[2].toInt()) }.toList()
     }
 }
