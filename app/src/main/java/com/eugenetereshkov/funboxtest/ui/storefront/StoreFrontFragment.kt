@@ -7,10 +7,12 @@ import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.LinearSnapHelper
 import com.eugenetereshkov.funboxtest.R
 import com.eugenetereshkov.funboxtest.presenter.main.MainViewModel
+import com.eugenetereshkov.funboxtest.presenter.storefront.StoreFrontViewModel
 import com.eugenetereshkov.funboxtest.ui.common.BaseFragment
 import com.eugenetereshkov.funboxtest.ui.common.list.StoreFrontAdapter
 import kotlinx.android.synthetic.main.fragment_store_front.*
 import org.koin.android.architecture.ext.sharedViewModel
+import org.koin.android.architecture.ext.viewModel
 
 
 class StoreFrontFragment : BaseFragment() {
@@ -21,8 +23,9 @@ class StoreFrontFragment : BaseFragment() {
 
     override val layoutResId: Int = R.layout.fragment_store_front
 
-    private val adapter by lazy { StoreFrontAdapter() }
-    private val viewModel: MainViewModel by sharedViewModel()
+    private val adapter by lazy { StoreFrontAdapter { mainViewModel.byeProduct(it) } }
+    private val mainViewModel: MainViewModel by sharedViewModel()
+    private val viewModel: StoreFrontViewModel by viewModel()
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
@@ -37,8 +40,12 @@ class StoreFrontFragment : BaseFragment() {
             LinearSnapHelper().attachToRecyclerView(it)
         }
 
-        viewModel.dataLiveData.observe(this, Observer { data ->
-            data?.let { adapter.submitList(it) }
+        mainViewModel.dataLiveData.observe(this, Observer { data ->
+            data?.let { adapter.setData(viewModel.processData(it)) }
         })
+    }
+
+    override fun onBackPressed() {
+        viewModel.onBackPressed()
     }
 }

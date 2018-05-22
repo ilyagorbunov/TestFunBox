@@ -25,6 +25,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_chainStyle="packed"
             tools:text="Sumsung" />
 
         <TextView
@@ -33,6 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="24dp"
             android:text="@string/price"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
             app:layout_constraintBottom_toTopOf="@+id/textViewLabelCount"
@@ -47,9 +49,9 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
             android:text="@string/count"
             android:textAppearance="@style/TextAppearance.AppCompat.Title"
-            app:layout_constraintBottom_toTopOf="@+id/buttonBye"
             app:layout_constraintEnd_toStartOf="@+id/textViewCount"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,12 +63,14 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="24dp"
             android:layout_marginStart="24dp"
+            android:layout_marginTop="8dp"
             android:text="@string/bye"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textViewLabelCount" />
+            app:layout_constraintTop_toBottomOf="@+id/textViewLabelCount"
+            app:layout_constraintVertical_bias="0.75" />
 
         <TextView
             android:id="@+id/textViewPrice"
@@ -93,5 +97,18 @@
             app:layout_constraintStart_toEndOf="@+id/textViewLabelCount"
             app:layout_constraintTop_toTopOf="@+id/textViewLabelCount"
             tools:text="3" />
+
+        <ProgressBar
+            android:id="@+id/progressBar"
+            style="?android:attr/progressBarStyle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textViewLabelCount"
+            app:layout_constraintVertical_bias="0.75"
+            tools:visibility="visible" />
     </android.support.constraint.ConstraintLayout>
 </android.support.v7.widget.CardView>

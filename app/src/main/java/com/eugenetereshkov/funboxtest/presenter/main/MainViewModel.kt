@@ -15,8 +15,8 @@ class MainViewModel(
 
     val dataLiveData = MutableLiveData<List<Product>>()
     val loadingLiveData = MutableLiveData<Boolean>()
+    var data: MutableList<Product> = mutableListOf()
 
-    lateinit var data: MutableList<Product>
     private val disposable = CompositeDisposable()
 
     init {
@@ -26,12 +26,18 @@ class MainViewModel(
                 .subscribe(
                         { products: List<Product> ->
                             data = products as MutableList<Product>
-                            dataLiveData.value = data
+                            dataLiveData.value = data.copy()
                         },
                         { router.showSystemMessage(it.toString()) }
                 )
                 .bindTo(disposable)
 
+    }
+
+    private fun MutableList<Product>.copy(): List<Product> {
+        val result = mutableListOf<Product>()
+        this.forEach { result.add(it.copy()) }
+        return result
     }
 
     override fun onCleared() {
@@ -49,6 +55,15 @@ class MainViewModel(
         saveData()
     }
 
+    fun byeProduct(product: Product) {
+        data.firstOrNull { it == product }?.run {
+            if (count > 0) {
+                count--
+                saveData()
+            }
+        }
+    }
+
     fun onBackPressed() {
         router.exit()
     }
@@ -58,7 +73,7 @@ class MainViewModel(
                 .doOnSubscribe { loadingLiveData.postValue(true) }
                 .doAfterTerminate { loadingLiveData.postValue(false) }
                 .subscribe {
-                    dataLiveData.value = data
+                    dataLiveData.value = data.copy()
                     router.showSystemMessage("Saved")
                 }
                 .bindTo(disposable)

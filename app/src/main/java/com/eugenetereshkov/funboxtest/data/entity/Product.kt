@@ -11,6 +11,13 @@ data class Product(
         var count: Int
 ) : Parcelable {
 
+    companion object {
+        const val PRICE = "price"
+        const val COUNT = "count"
+        const val NAME = "name"
+        const val LOADING = "loading"
+    }
+
     fun toStringForConverts(): String {
         return "$name#$price#$count"
     }
