@@ -18,12 +18,12 @@ class ProductRepository(
 ) : IProductRepository {
 
     override fun getProducts(): Single<List<Product>> =
-            storageFormatVisitor.read(CSVStorageFile("data.csv"))
+            CSVStorageFile("data.csv").read(storageFormatVisitor)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
 
     override fun saveProducts(data: List<Product>): Completable =
-            storageFormatVisitor.write(CSVStorageFile("data.csv"), data)
+            CSVStorageFile("data.csv").write(storageFormatVisitor, data)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
 }

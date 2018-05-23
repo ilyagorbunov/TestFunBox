@@ -55,7 +55,7 @@ class StoreFrontAdapter(
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
-        holder.bind(position, getItem(position))
+        holder.bind(getItem(position))
     }
 
     fun setData(data: List<LoadProduct>) {
@@ -67,17 +67,16 @@ class StoreFrontAdapter(
             listener: (position: Int) -> Unit
     ) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-        private var index = RecyclerView.NO_POSITION
-
         init {
             buttonBye.setOnClickListener {
-                bindLoading(true)
-                listener(index)
+                if (adapterPosition != RecyclerView.NO_POSITION) {
+                    bindLoading(true)
+                    listener(adapterPosition)
+                }
             }
         }
 
-        fun bind(position: Int, item: LoadProduct) {
-            index = position
+        fun bind(item: LoadProduct) {
             textViewName.text = item.product.name
             bindLoading(item.loading)
             bindCount(item.product.count)
