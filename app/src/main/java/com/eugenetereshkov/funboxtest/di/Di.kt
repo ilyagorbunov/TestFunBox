@@ -3,7 +3,8 @@ package com.eugenetereshkov.funboxtest.di
 import android.os.Environment
 import com.eugenetereshkov.funboxtest.data.repository.IProductRepository
 import com.eugenetereshkov.funboxtest.data.repository.ProductRepository
-import com.eugenetereshkov.funboxtest.data.storage.RawAppData
+import com.eugenetereshkov.funboxtest.data.storage.IStorageFormatVisitor
+import com.eugenetereshkov.funboxtest.data.storage.StorageFormatVisitor
 import com.eugenetereshkov.funboxtest.presenter.backend.BackEndViewModel
 import com.eugenetereshkov.funboxtest.presenter.editproduct.EditProductViewModel
 import com.eugenetereshkov.funboxtest.presenter.main.MainViewModel
@@ -25,7 +26,12 @@ val appModule = applicationContext {
     bean("backEnd") { backEndCicerone.router }
     bean("backEnd") { backEndCicerone.navigatorHolder }
 
-    bean { RawAppData(androidApplication().resources.assets, androidApplication().getExternalFilesDir(Environment.MEDIA_MOUNTED)) }
+    bean {
+        StorageFormatVisitor(
+                assets = androidApplication().resources.assets,
+                filesDir = androidApplication().getExternalFilesDir(Environment.MEDIA_MOUNTED)
+        ) as IStorageFormatVisitor
+    }
     bean { ProductRepository(get()) as IProductRepository }
 
     viewModel { MainViewModel(get<Router>(name = "main"), get()) }
