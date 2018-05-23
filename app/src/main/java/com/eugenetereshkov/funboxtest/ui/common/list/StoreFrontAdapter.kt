@@ -18,16 +18,16 @@ class StoreFrontAdapter(
 ) : ListAdapter<StoreFrontAdapter.LoadProduct, StoreFrontAdapter.ViewHolder>(ProductDiffUtilsCallBack) {
 
     private object ProductDiffUtilsCallBack : DiffUtil.ItemCallback<LoadProduct>() {
-        override fun areItemsTheSame(oldItem: LoadProduct, newItem: LoadProduct): Boolean =
-                oldItem.product.name == newItem.product.name
+        override fun areItemsTheSame(oldItem: LoadProduct, newItem: LoadProduct): Boolean = true
 
-        override fun areContentsTheSame(oldItem: LoadProduct, newItem: LoadProduct): Boolean =
-                oldItem.product.count == newItem.product.count && oldItem.product.price == newItem.product.price
-                        && oldItem.loading == newItem.loading
+        override fun areContentsTheSame(oldItem: LoadProduct, newItem: LoadProduct): Boolean = oldItem == newItem
 
         override fun getChangePayload(oldItem: LoadProduct, newItem: LoadProduct): Any = Bundle().apply {
-            if (oldItem.product.price != newItem.product.price) putFloat(Product.PRICE, newItem.product.price)
-            if (oldItem.product.count != newItem.product.count) putInt(Product.COUNT, newItem.product.count)
+            val oldProduct = oldItem.product
+            val newProduct = newItem.product
+            if (oldProduct.name != newProduct.name) putString(Product.NAME, newProduct.name)
+            if (oldProduct.price != newProduct.price) putFloat(Product.PRICE, newProduct.price)
+            if (oldProduct.count != newProduct.count) putInt(Product.COUNT, newProduct.count)
             if (oldItem.loading != newItem.loading) putBoolean(Product.LOADING, newItem.loading)
         }
     }
@@ -48,6 +48,7 @@ class StoreFrontAdapter(
 
         (payloads[0] as Bundle).keySet().forEach { key ->
             val item = getItem(position)
+            if (key == Product.NAME) holder.bindName(item.product.name)
             if (key == Product.PRICE) holder.bindPrice(item.product.price)
             if (key == Product.COUNT) holder.bindCount(item.product.count)
             if (key == Product.LOADING) holder.bindLoading(item.loading)
@@ -81,6 +82,10 @@ class StoreFrontAdapter(
             bindLoading(item.loading)
             bindCount(item.product.count)
             bindPrice(item.product.price)
+        }
+
+        fun bindName(name: String) {
+            textViewName.text = name
         }
 
         fun bindPrice(price: Float) {

@@ -17,11 +17,9 @@ class BackEndProductAdapter(
 ) : ListAdapter<Product, BackEndProductAdapter.ViewHolder>(ProductDiffUtilsCallBack) {
 
     private object ProductDiffUtilsCallBack : DiffUtil.ItemCallback<Product>() {
-        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean =
-                oldItem.name == newItem.name
+        override fun areItemsTheSame(oldItem: Product, newItem: Product): Boolean = true
 
-        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean =
-                oldItem == newItem
+        override fun areContentsTheSame(oldItem: Product, newItem: Product): Boolean = oldItem == newItem
 
         override fun getChangePayload(oldItem: Product, newItem: Product): Any = Bundle().apply {
             if (oldItem.name != newItem.name) putString(Product.NAME, newItem.name)
