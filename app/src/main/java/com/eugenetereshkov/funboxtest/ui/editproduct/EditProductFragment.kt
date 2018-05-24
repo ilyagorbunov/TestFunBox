@@ -8,6 +8,7 @@ import android.view.View
 import androidx.core.os.bundleOf
 import com.eugenetereshkov.funboxtest.R
 import com.eugenetereshkov.funboxtest.extension.bindTo
+import com.eugenetereshkov.funboxtest.extension.removeFocus
 import com.eugenetereshkov.funboxtest.presenter.editproduct.EditProductViewModel
 import com.eugenetereshkov.funboxtest.presenter.main.MainViewModel
 import com.eugenetereshkov.funboxtest.ui.common.BaseFragment
@@ -68,6 +69,7 @@ class EditProductFragment : BaseFragment() {
                     R.id.menu_save -> {
                         mainViewModel.onSavePressed(viewModel.idProduct, viewModel.newProduct, viewModel.isEditMode)
                         viewModel.onBackPressed()
+                        mainLayout.removeFocus()
                         return@setOnMenuItemClickListener true
                     }
                 }
