@@ -9,6 +9,7 @@ import com.eugenetereshkov.funboxtest.presenter.backend.BackEndViewModel
 import com.eugenetereshkov.funboxtest.presenter.editproduct.EditProductViewModel
 import com.eugenetereshkov.funboxtest.presenter.main.MainViewModel
 import com.eugenetereshkov.funboxtest.presenter.storefront.StoreFrontViewModel
+import com.eugenetereshkov.funboxtest.ui.editproduct.EditProductFragment
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.applicationContext
@@ -36,6 +37,8 @@ val appModule = applicationContext {
 
     viewModel { MainViewModel(get<Router>(name = "main"), get()) }
     viewModel { BackEndViewModel(get<Router>(name = "backEnd")) }
-    viewModel { EditProductViewModel(get<Router>(name = "backEnd")) }
+    viewModel { params ->
+        EditProductViewModel(get<Router>(name = "backEnd"), params[EditProductFragment.PRODUCT_ID])
+    }
     viewModel { StoreFrontViewModel(get<Router>(name = "main")) }
 }

@@ -7,37 +7,39 @@ import android.view.MenuItem
 import android.view.View
 import androidx.core.os.bundleOf
 import com.eugenetereshkov.funboxtest.R
-import com.eugenetereshkov.funboxtest.data.entity.Product
 import com.eugenetereshkov.funboxtest.extension.bindTo
 import com.eugenetereshkov.funboxtest.presenter.editproduct.EditProductViewModel
 import com.eugenetereshkov.funboxtest.presenter.main.MainViewModel
 import com.eugenetereshkov.funboxtest.ui.common.BaseFragment
 import com.jakewharton.rxbinding2.widget.textChanges
 import io.reactivex.Observable
+import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.disposables.CompositeDisposable
 import io.reactivex.functions.Function3
 import kotlinx.android.synthetic.main.fragment_edit_product.*
 import org.koin.android.architecture.ext.sharedViewModel
 import org.koin.android.ext.android.inject
+import java.util.concurrent.TimeUnit
 
 
-typealias EditProduct = Function3<Pair<String, Boolean>, Pair<Float, Boolean>, Pair<Int, Boolean>, Pair<Product, Boolean>>
+typealias EditProduct = Function3<String, String, String, Triple<String, String, String>>
 
 class EditProductFragment : BaseFragment() {
 
     companion object {
-        const val PRODUCT_INDEX = "product_index"
+        const val PRODUCT_ID = "product_index"
+        const val NO_PRODUCT = -1
 
         fun newInstance(data: Int?) = EditProductFragment().apply {
-            data?.let { arguments = bundleOf(PRODUCT_INDEX to it) }
+            arguments = bundleOf(PRODUCT_ID to (data ?: NO_PRODUCT))
         }
     }
 
     override val layoutResId: Int = R.layout.fragment_edit_product
 
     private val mainViewModel: MainViewModel by sharedViewModel()
-    private val viewModel: EditProductViewModel by inject()
-    private var isEditMode: Boolean = false
+    private val viewModel: EditProductViewModel by inject { mapOf(PRODUCT_ID to idProduct) }
+    private val idProduct get() = arguments?.getInt(PRODUCT_ID) ?: NO_PRODUCT
     private val disposable = CompositeDisposable()
     private val saveMenuItem by lazy { toolbar.menu.findItem(R.id.menu_save) }
     private val clickListener by lazy {
@@ -57,23 +59,14 @@ class EditProductFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        val index = arguments?.let {
-            isEditMode = true
-            it.getInt(PRODUCT_INDEX)
-        }
-
         toolbar.apply {
-            title = if (isEditMode) getString(R.string.editing_product) else getString(R.string.adding_product)
+            title = if (viewModel.isEditMode) getString(R.string.editing_product) else getString(R.string.adding_product)
             inflateMenu(R.menu.edit_backend_menu)
             saveMenuItem.isVisible = false
             setOnMenuItemClickListener { item: MenuItem ->
                 when (item.itemId) {
                     R.id.menu_save -> {
-                        if (isEditMode) {
-                            mainViewModel.onDataChanged(index ?: -1, viewModel.newProduct)
-                        } else {
-                            mainViewModel.onDataAdded(viewModel.newProduct)
-                        }
+                        mainViewModel.onSavePressed(viewModel.idProduct, viewModel.newProduct, viewModel.isEditMode)
                         viewModel.onBackPressed()
                         return@setOnMenuItemClickListener true
                     }
@@ -86,45 +79,38 @@ class EditProductFragment : BaseFragment() {
         imageButtonAdd.setOnClickListener(clickListener)
         imageButtonRemove.setOnClickListener(clickListener)
 
+        if (viewModel.isEditMode) viewModel.oldProduct = mainViewModel.data[viewModel.idProduct]
+
         viewModel.productChangesLiveData.observe(this, Observer { changed ->
             changed?.let { saveMenuItem.isVisible = it }
         })
 
+        viewModel.productLiveData.observe(this, Observer { product ->
+            product?.run {
+                textViewName.setText(name)
+                editTextPrice.setText(price.toString())
+                editTextCount.setText(count.toString())
+            }
+        })
+
         val nameObservable = textViewName.textChanges()
                 .map { it.trim().toString() }
-                .map { Pair(it, it.isNotEmpty()) }
 
         val priceObservable = editTextPrice.textChanges()
                 .map { it.trim().toString() }
-                .map { if (it.isNotEmpty()) Pair(it.toFloat(), true) else Pair(0f, false) }
 
         val countObservable = editTextCount.textChanges()
                 .map { it.trim().toString() }
-                .map { if (it.isNotEmpty()) Pair(it.toInt(), true) else Pair(0, false) }
 
         Observable.combineLatest(
                 nameObservable,
                 priceObservable,
                 countObservable,
-                EditProduct { namePair, pricePair, countPair ->
-                    val product = Product(
-                            name = namePair.first,
-                            price = pricePair.first,
-                            count = countPair.first
-                    )
-                    val isValid = namePair.second && pricePair.second && countPair.second
-                    Pair(product, isValid)
-                })
-                .subscribe { viewModel.onProductChanged(it, isEditMode) }
+                EditProduct { name, price, count -> Triple(name, price, count) })
+                .debounce(250, TimeUnit.MILLISECONDS)
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe { viewModel.onProductChanged(it) }
                 .bindTo(disposable)
-
-        val (name, price, count) = index?.let {
-            mainViewModel.data[it].run { Triple(name, price, count) }
-        } ?: Triple("", 0f, 0)
-
-        textViewName.setText(name)
-        editTextPrice.setText(price.toString())
-        editTextCount.setText(count.toString())
     }
 
     override fun onStop() {

@@ -6,9 +6,9 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Product(
-        var name: String,
-        var price: Float,
-        var count: Int
+        var name: String = "",
+        var price: Float = 0F,
+        var count: Int = 0
 ) : Parcelable {
 
     companion object {

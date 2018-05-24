@@ -34,25 +34,13 @@ class MainViewModel(
 
     }
 
-    private fun MutableList<Product>.copy(): List<Product> {
-        val result = mutableListOf<Product>()
-        this.forEach { result.add(it.copy()) }
-        return result
-    }
-
     override fun onCleared() {
         disposable.clear()
         super.onCleared()
     }
 
-    fun onDataChanged(index: Int, product: Product) {
-        data[index] = product
-        saveData()
-    }
-
-    fun onDataAdded(newProduct: Product) {
-        data.add(newProduct)
-        saveData()
+    fun onSavePressed(idProduct: Int, product: Product, isEditMode: Boolean) {
+        if (isEditMode) onDataChanged(idProduct, product) else onDataAdded(product)
     }
 
     fun byeProduct(product: Product) {
@@ -68,6 +56,16 @@ class MainViewModel(
         router.exit()
     }
 
+    private fun onDataChanged(index: Int, product: Product) {
+        data[index] = product
+        saveData()
+    }
+
+    private fun onDataAdded(newProduct: Product) {
+        data.add(newProduct)
+        saveData()
+    }
+
     private fun saveData() {
         productRepository.saveProducts(data)
                 .doOnSubscribe { loadingLiveData.postValue(true) }
@@ -77,5 +75,11 @@ class MainViewModel(
                     router.showSystemMessage("Saved")
                 }
                 .bindTo(disposable)
+    }
+
+    private fun MutableList<Product>.copy(): List<Product> {
+        val result = mutableListOf<Product>()
+        this.forEach { result.add(it.copy()) }
+        return result
     }
 }
