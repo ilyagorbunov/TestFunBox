@@ -5,12 +5,13 @@ import io.reactivex.Completable
 import io.reactivex.Single
 
 
-sealed class StorageFile(val name: String) {
-    abstract fun read(visitor: IStorageFormatVisitor): Single<List<Product>>
-    abstract fun write(visitor: IStorageFormatVisitor, data: List<Product>): Completable
+interface StorageFile {
+    val name: String
+    fun read(visitor: IStorageFormatVisitor): Single<List<Product>>
+    fun write(visitor: IStorageFormatVisitor, data: List<Product>): Completable
 }
 
-class CSVStorageFile(name: String) : StorageFile(name) {
+class CSVStorageFile(override val name: String) : StorageFile {
 
     override fun read(visitor: IStorageFormatVisitor): Single<List<Product>> = visitor.read(this)
 
