@@ -1,7 +1,10 @@
 package com.eugenetereshkov.funboxtest.ui.main
 
+import android.content.Context
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.BottomNavigationView
+import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import com.eugenetereshkov.funboxtest.R
 import com.eugenetereshkov.funboxtest.presenter.main.MainViewModel
@@ -10,15 +13,29 @@ import com.eugenetereshkov.funboxtest.ui.common.BaseFragment
 import com.eugenetereshkov.funboxtest.ui.storefront.StoreFrontFragment
 import kotlinx.android.synthetic.main.activity_main.*
 import org.koin.android.ext.android.inject
+import ru.terrakok.cicerone.NavigatorHolder
+import ru.terrakok.cicerone.android.SupportAppNavigator
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        const val MAIN_NAVIGATION = "main"
+    }
+
+    private val navigator by lazy {
+        object : SupportAppNavigator(this, R.id.container) {
+            override fun createActivityIntent(context: Context?, screenKey: String?, data: Any?): Intent? = null
+
+            override fun createFragment(screenKey: String?, data: Any?): Fragment? = null
+        }
+    }
 
     private val mOnNavigationItemSelectedListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         val selectItem = item.itemId
         if (selectItem != currentTab) showTab(selectItem)
         true
     }
-
+    private val navigatorHolder: NavigatorHolder by inject(name = MAIN_NAVIGATION)
     private var currentTab = R.id.navigation_store_front
     private lateinit var tabs: HashMap<String, BaseFragment>
     private val tabKeys = listOf(
@@ -45,6 +62,16 @@ class MainActivity : AppCompatActivity() {
         }
 
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener)
+    }
+
+    override fun onResumeFragments() {
+        navigatorHolder.setNavigator(navigator)
+        super.onResumeFragments()
+    }
+
+    override fun onPause() {
+        navigatorHolder.removeNavigator()
+        super.onPause()
     }
 
     private fun tabIdToFragmentTag(id: Int) = "tab_$id"

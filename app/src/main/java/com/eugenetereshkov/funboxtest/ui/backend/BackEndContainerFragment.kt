@@ -16,6 +16,8 @@ import ru.terrakok.cicerone.android.SupportAppNavigator
 class BackEndContainerFragment : BaseFragment() {
 
     companion object {
+        const val BACK_END_NAVIGATION = "backEnd"
+
         fun newInstance() = BackEndContainerFragment()
     }
 
@@ -33,8 +35,8 @@ class BackEndContainerFragment : BaseFragment() {
 
         }
     }
-    private val navigatorHolder: NavigatorHolder by inject(name = "backEnd")
-    private val router: Router by inject(name = "backEnd")
+    private val navigatorHolder: NavigatorHolder by inject(name = BACK_END_NAVIGATION)
+    private val router: Router by inject(name = BACK_END_NAVIGATION)
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)

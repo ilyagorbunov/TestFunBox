@@ -9,23 +9,24 @@ import com.eugenetereshkov.funboxtest.presenter.backend.BackEndViewModel
 import com.eugenetereshkov.funboxtest.presenter.editproduct.EditProductViewModel
 import com.eugenetereshkov.funboxtest.presenter.main.MainViewModel
 import com.eugenetereshkov.funboxtest.presenter.storefront.StoreFrontViewModel
+import com.eugenetereshkov.funboxtest.ui.backend.BackEndContainerFragment.Companion.BACK_END_NAVIGATION
 import com.eugenetereshkov.funboxtest.ui.editproduct.EditProductFragment
+import com.eugenetereshkov.funboxtest.ui.main.MainActivity.Companion.MAIN_NAVIGATION
 import org.koin.android.architecture.ext.viewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.dsl.module.applicationContext
 import ru.terrakok.cicerone.Cicerone
-import ru.terrakok.cicerone.Router
 
 
 val appModule = applicationContext {
     val mainCicerone = Cicerone.create()
-    bean("main") { mainCicerone.router }
-    bean("main") { mainCicerone.navigatorHolder }
+    bean(MAIN_NAVIGATION) { mainCicerone.router }
+    bean(MAIN_NAVIGATION) { mainCicerone.navigatorHolder }
 
 
     val backEndCicerone = Cicerone.create()
-    bean("backEnd") { backEndCicerone.router }
-    bean("backEnd") { backEndCicerone.navigatorHolder }
+    bean(BACK_END_NAVIGATION) { backEndCicerone.router }
+    bean(BACK_END_NAVIGATION) { backEndCicerone.navigatorHolder }
 
     bean {
         StorageFormatVisitor(
@@ -35,10 +36,10 @@ val appModule = applicationContext {
     }
     bean { ProductRepository(get()) as IProductRepository }
 
-    viewModel { MainViewModel(get<Router>(name = "main"), get()) }
-    viewModel { BackEndViewModel(get<Router>(name = "backEnd")) }
+    viewModel { MainViewModel(get(name = MAIN_NAVIGATION), get()) }
+    viewModel { BackEndViewModel(get(name = BACK_END_NAVIGATION)) }
     viewModel { params ->
-        EditProductViewModel(get<Router>(name = "backEnd"), params[EditProductFragment.PRODUCT_ID])
+        EditProductViewModel(get(name = BACK_END_NAVIGATION), params[EditProductFragment.PRODUCT_ID])
     }
-    viewModel { StoreFrontViewModel(get<Router>(name = "main")) }
+    viewModel { StoreFrontViewModel(get(name = MAIN_NAVIGATION)) }
 }
